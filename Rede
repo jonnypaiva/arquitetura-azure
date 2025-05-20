@@ -90,3 +90,50 @@ az network vnet create \
   --resource-group rg-projeto \
   --name vnet-producao \
   --subnet-name subnet-web
+
+2. Adicionando uma NSG
+bash
+Copy
+Edit
+az network nsg create \
+  --resource-group rg-projeto \
+  --name nsg-web
+
+az network nsg rule create \
+  --resource-group rg-projeto \
+  --nsg-name nsg-web \
+  --name AllowHTTP \
+  --protocol Tcp \
+  --direction Inbound \
+  --source-address-prefixes '*' \
+  --destination-port-ranges 80 \
+  --access Allow \
+  --priority 100
+📈 Escalabilidade de VMs
+🔹 Tipos de escalabilidade:
+Tipo	Descrição
+Escalabilidade Vertical	Aumentar CPU/RAM da mesma VM
+Escalabilidade Horizontal	Adicionar várias instâncias (Scale Sets)
+
+📌 Usando Scale Sets:
+bash
+Copy
+Edit
+az vmss create \
+  --resource-group rg-projeto \
+  --name myScaleSet \
+  --image UbuntuLTS \
+  --upgrade-policy-mode automatic \
+  --admin-username azureuser \
+  --generate-ssh-keys
+🗺️ Diagrama: VM com Rede e Segurança
+mermaid
+Copy
+Edit
+graph TD
+    A[Usuário] --> B[IP Público]
+    B --> C[NSG]
+    C --> D[VM]
+    D --> E[Sub-rede]
+    E --> F[VNet]
+    D --> G[Disco OS + Disco de Dados]
