@@ -1,0 +1,92 @@
+# ⚙️ Computação e Rede na Azure + Configuração e Dimensionamento de VMs
+
+## 📘 Introdução
+
+No Microsoft Azure, **computação** e **rede** são pilares fundamentais para executar aplicações, hospedar serviços e integrar ambientes híbridos com segurança, performance e escalabilidade.
+
+Este guia apresenta os conceitos principais e mostra como configurar **Máquinas Virtuais (VMs)** com dimensionamento correto de recursos e rede associada.
+
+---
+
+## 🖥️ Computação no Azure
+
+### 🔷 O que é?
+A camada de **computação** representa os recursos que executam suas aplicações, como VMs, containers, apps e funções.
+
+### 🧩 Principais Serviços de Computação:
+
+| Serviço             | Uso Comum                                   |
+|---------------------|---------------------------------------------|
+| Virtual Machines     | Infraestrutura legada ou personalizada     |
+| App Service          | Hospedagem de sites e APIs gerenciadas     |
+| Azure Kubernetes     | Orquestração de containers                 |
+| Azure Functions      | Execução de código sob demanda (serverless)|
+
+---
+
+## 🌐 Rede no Azure
+
+### 🔷 O que é?
+A camada de **rede** oferece conectividade entre recursos, controle de tráfego e integração com ambientes on-premises.
+
+### 🧩 Principais Componentes de Rede:
+
+| Componente         | Função                                        |
+|--------------------|-----------------------------------------------|
+| Virtual Network (VNet) | Rede privada com sub-redes               |
+| Network Security Group (NSG) | Controle de tráfego por regras     |
+| Public IP / DNS    | Endereçamento externo                        |
+| Load Balancer      | Distribuição de tráfego entre instâncias     |
+| Application Gateway| Balanceamento de carga com inspeção HTTP/S   |
+
+---
+
+## 🛠️ Criando e Configurando uma Máquina Virtual (VM)
+
+### 1. 🧱 Criar uma VM no Portal
+
+1. Acesse o [Portal Azure](https://portal.azure.com)
+2. Vá em **"Máquinas Virtuais" > Criar**
+3. Preencha:
+   - **Nome:** vm-producao
+   - **Região:** Brazil South
+   - **Imagem:** Ubuntu 22.04 LTS / Windows Server 2022
+   - **Tamanho:** *Standard B2s*, *D2s_v3*, etc.
+   - **Autenticação:** SSH ou senha
+   - **Rede:** Selecione uma VNet existente ou crie uma nova
+
+### 2. ⚖️ Dimensionamento de Recursos
+
+#### 🔹 Como escolher o tamanho da VM?
+Leve em consideração:
+
+| Critério                  | Exemplo                           |
+|---------------------------|-----------------------------------|
+| Carga de trabalho         | Web app, banco de dados, etc.     |
+| VCPU                      | Ex: 2 vCPUs para web simples       |
+| Memória RAM               | Ex: 4 GB para aplicações leves     |
+| Disco                     | SSD (Premium) ou HDD (Standard)   |
+| Rede                      | Largura de banda necessária       |
+
+> 💡 Use a [Calculadora de Preços do Azure](https://azure.microsoft.com/pt-br/pricing/calculator/) para simular custos e dimensionamento.
+
+### Exemplos de SKU:
+
+| SKU            | vCPUs | RAM   | Uso típico              |
+|----------------|-------|-------|--------------------------|
+| B1s            | 1     | 1 GB  | Testes e desenvolvimento |
+| B2s            | 2     | 4 GB  | Web apps leves           |
+| D2s_v3         | 2     | 8 GB  | Banco de dados, apps     |
+| E4s_v3         | 4     | 32 GB | Cargas de dados intensas |
+
+---
+
+## 🌐 Configurando Rede da VM
+
+### 1. Criando uma VNet e Sub-rede via CLI
+
+```bash
+az network vnet create \
+  --resource-group rg-projeto \
+  --name vnet-producao \
+  --subnet-name subnet-web
